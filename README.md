@@ -1,4 +1,6 @@
-# NugetSourceManager
+# Nuget Source Manager
+
+[![Build status](https://ci.appveyor.com/api/projects/status/4vubn0uckh5kdrtx?svg=true)](https://ci.appveyor.com/project/bilal-fazlani/nugetsourcemanager)
 
 ## What is it ?
 It's a command line tool to manage nuget sources. With this you can easily add/update/remove/enable/disable and list the nuget sources in a Nuget.Config file.
