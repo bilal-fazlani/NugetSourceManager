@@ -71,10 +71,19 @@
     <Compile Include="NugetConfig.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests.cs" />
+    <Compile Include="Tests\AddOrUpdateTests.cs" />
+    <Compile Include="Tests\BasicTests.cs" />
+    <Compile Include="Tests\DisableTests.cs" />
+    <Compile Include="Tests\EnableTests.cs" />
+    <Compile Include="Tests\LoadXmlTests.cs" />
+    <Compile Include="Tests\RemoveTests.cs" />
+    <Compile Include="Tests\FeatureTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="DefaultNuget.Config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -66,11 +66,30 @@ namespace NugetSourceManager
 
         protected void LoadXml()
         {
+            CreateFileIfNotExists();
+
             XmlSerializer serializer = new XmlSerializer(typeof(XmlData));
             using (var filestream = new FileStream(Path, FileMode.Open))
             {
                 XmlData xmlData = (XmlData)serializer.Deserialize(new StreamReader(filestream));
                 XmlData = xmlData;
+            }
+        }
+
+        private void CreateFileIfNotExists()
+        {
+            string directory = System.IO.Path.GetDirectoryName(Path);
+
+            bool dirExists = Directory.Exists(directory);
+
+            if (!dirExists)
+            {
+                Directory.CreateDirectory(directory);
+            }
+
+            if (!File.Exists(Path))
+            {
+                File.Copy("DefaultNuget.Config", Path);
             }
         }
 
@@ -152,8 +171,7 @@ does not exist");
         {
             string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string nugetPath = System.IO.Path.Combine(appData, "Nuget", "Nuget.Config");
-            if (File.Exists(nugetPath)) this.Path = nugetPath;
-            else throw new FileNotFoundException("Default Nuget.Config file not found", nugetPath);
+            this.Path = nugetPath;
         }
     }
 
