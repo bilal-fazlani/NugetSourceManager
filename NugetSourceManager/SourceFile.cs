@@ -13,6 +13,18 @@ namespace NugetSourceManager
 
         public XmlData XmlData { get; protected set; }
 
+        protected void Save()
+        {
+            XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
+            ns.Add("", "");
+
+            XmlSerializer serializer = new XmlSerializer(typeof(XmlData));
+            using (var filestream = new FileStream(Path, FileMode.OpenOrCreate))
+            {
+                serializer.Serialize(filestream, XmlData, ns);
+            }
+        }
+
         public void AddOrUpdateSource(PackageSource packageSource)
         {
             AddOrUpdateSource(packageSource.Name, packageSource.SourcePath, packageSource.ProtocolVersion);
@@ -53,6 +65,8 @@ namespace NugetSourceManager
             {
                 XmlData.PackageSources.Sources.Add(newPackageSource);
             }
+
+            Save();
         }
 
         protected void LoadXml()
@@ -63,6 +77,21 @@ namespace NugetSourceManager
                 XmlData xmlData = (XmlData)serializer.Deserialize(new StreamReader(filestream));
                 XmlData = xmlData;
             }
+        }
+
+        public PackageSource GetPackageSource(string packageSourceNameOrPath)
+        {
+            return XmlData.PackageSources.Sources.SingleOrDefault(
+                    x => x.Equals(packageSourceNameOrPath)
+                );
+        }
+
+        public void RemovePackageSource(string packageSourceNameOrPath)
+        {
+            XmlData.PackageSources.Sources
+                .RemoveAll(x => x.Equals(packageSourceNameOrPath));
+
+            Save();
         }
     }
 

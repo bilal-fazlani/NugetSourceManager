@@ -18,19 +18,26 @@ namespace NugetSourceManager
 
         public override bool Equals(object obj)
         {
-            if (obj == null) return false;
+            if ((obj as PackageSource) != null)
+            {
+                PackageSource otherSource = (PackageSource)obj;
 
-            PackageSource otherSource = (PackageSource) obj;
+                bool nameEquals = string.Compare(otherSource.Name, Name, StringComparison.OrdinalIgnoreCase) == 0;
 
-            bool nameEquals = string.Compare(otherSource.Name, Name, StringComparison.OrdinalIgnoreCase) == 0;
+                bool urlEquals = string.Compare(this.SourcePath, otherSource.SourcePath,
+                    StringComparison.OrdinalIgnoreCase) == 0;
 
-            //Uri currentUri = new Uri(SourcePath);
-            //Uri otherUri = new Uri(otherSource.SourcePath);
+                return nameEquals | urlEquals;
+            }
 
-            bool urlEquals = string.Compare(this.SourcePath, otherSource.SourcePath, 
-                StringComparison.OrdinalIgnoreCase) == 0;
+            if ((obj as string) != null)
+            {
+                string nameOrSource = (string) obj;
+                return string.Compare(Name, nameOrSource, StringComparison.OrdinalIgnoreCase) == 0 ||
+                       string.Compare(SourcePath, nameOrSource, StringComparison.OrdinalIgnoreCase) == 0;
+            }
 
-            return nameEquals | urlEquals;
+            return false;
         }
     }
 

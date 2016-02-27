@@ -71,7 +71,6 @@
     <Compile Include="NugetConfig.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SourceFileManager.cs" />
     <Compile Include="Tests.cs" />
   </ItemGroup>
   <ItemGroup>

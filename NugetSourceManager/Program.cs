@@ -10,6 +10,7 @@ namespace NugetSourceManager
     {
         static void Main(string[] args)
         {
+
         }
     }
 }

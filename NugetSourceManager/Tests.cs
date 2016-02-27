@@ -32,9 +32,6 @@ namespace NugetSourceManager
 
             _defaultSourceFile.AddOrUpdateSource(newSourceName, newSourceValue);
 
-            SourceFileManager sourceFileManager = new SourceFileManager(_defaultSourceFile);
-            sourceFileManager.Save();
-
             PackageSource expectedRecord = _defaultSourceFile.XmlData.PackageSources.Sources.SingleOrDefault(
                 x => x.Name == newSourceName && x.SourcePath == newSourceValue && x.ProtocolVersion == null);
 
@@ -51,10 +48,6 @@ namespace NugetSourceManager
             };
 
             _defaultSourceFile.AddOrUpdateSource(packageSource);
-
-            SourceFileManager sourceFileManager = new SourceFileManager(_defaultSourceFile);
-
-            sourceFileManager.Save();
 
             return packageSource;
         }
@@ -147,6 +140,46 @@ namespace NugetSourceManager
                 .Sources
                 .SingleOrDefault(x => x.Name == oldPackageName && x.SourcePath == newPackageSource)
                 .Should().NotBeNull("this package should exist!");
+        }
+
+        [Fact]
+        public void Can_RemoveSource_WhenNameExists()
+        {
+            var packageSource = AddRandomSourceToDefault();
+
+            //assert that it exists
+            _defaultSourceFile.GetPackageSource(packageSource.Name)
+                .ShouldBeEquivalentTo(packageSource);
+
+            //now remove the source by name
+            _defaultSourceFile.RemovePackageSource(packageSource.Name);
+
+            //now make sure it doesnt exist
+            _defaultSourceFile.GetPackageSource(packageSource.Name)
+                .Should().BeNull("package should be removed but still exists");
+        }
+
+        [Fact]
+        public void Can_RemoveSource_WhenSourcePathExists()
+        {
+            var packageSource = AddRandomSourceToDefault();
+
+            //assert that it exists
+            _defaultSourceFile.GetPackageSource(packageSource.SourcePath)
+                .ShouldBeEquivalentTo(packageSource);
+
+            //now remove the source by path
+            _defaultSourceFile.RemovePackageSource(packageSource.SourcePath);
+
+            //now make sure it doesnt exist
+            _defaultSourceFile.GetPackageSource(packageSource.Name)
+                .Should().BeNull("package should be removed but still exists");
+        }
+
+        [Fact]
+        public void RemoveSource_ShouldNorBreak_When_SourceDoesntExist()
+        {
+            _defaultSourceFile.RemovePackageSource(Guid.NewGuid().ToString());
         }
     }
 }
