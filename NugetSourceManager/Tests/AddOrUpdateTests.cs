@@ -110,5 +110,64 @@ namespace NugetSourceManager.Tests
                 .SingleOrDefault(x => x.Name == oldPackageName && x.SourcePath == newPackageSource)
                 .Should().NotBeNull("this package should exist!");
         }
+
+        [Fact]
+        public void Can_UpdateName_InDisabledSection_when_updating_singleRecord()
+        {
+            string oldName = Guid.NewGuid().ToString();
+            string path = Guid.NewGuid().ToString();
+            string newName = Guid.NewGuid().ToString();
+
+            //add source
+            _defaultSourceFile.AddOrUpdateSource(oldName, path);
+
+            //disable it
+            _defaultSourceFile.DisablePackageSource(oldName);
+
+            //update its name
+            _defaultSourceFile.AddOrUpdateSource(newName, path);
+
+            //old should not exist in disabled entires
+            _defaultSourceFile.XmlData.DisabledPackageSources.Entries
+                .Any(x => string.Compare(x.Name, oldName, StringComparison.OrdinalIgnoreCase) == 0)
+                .Should().BeFalse();
+
+            //new should exist in disable entries
+            _defaultSourceFile.XmlData.DisabledPackageSources.Entries
+                .Any(x => string.Compare(x.Name, newName, StringComparison.OrdinalIgnoreCase) == 0)
+                .Should().BeTrue();
+        }
+
+
+        [Fact]
+        public void Can_UpdateName_InDisabledSection_when_updating_multiple_records()
+        {
+            string name_a = Guid.NewGuid().ToString();
+            string path_a = Guid.NewGuid().ToString();
+            string name_b = Guid.NewGuid().ToString();
+            string path_b = Guid.NewGuid().ToString();
+
+            //add source
+            _defaultSourceFile.AddOrUpdateSource(name_a, path_a);
+
+            //disable it
+            _defaultSourceFile.DisablePackageSource(name_a);
+
+            //add another source
+            _defaultSourceFile.AddOrUpdateSource(name_b, path_b);
+
+            //now merge 2 sources to reflect name a but path b
+            _defaultSourceFile.AddOrUpdateSource(name_a, path_b);
+
+            //name_b should not exist in disabled entries
+            _defaultSourceFile.XmlData.DisabledPackageSources.Entries
+                .Any(x => string.Compare(x.Name, name_b, StringComparison.OrdinalIgnoreCase) == 0)
+                .Should().BeFalse();
+
+            //name_a should exist in disable entries
+            _defaultSourceFile.XmlData.DisabledPackageSources.Entries
+                .Any(x => string.Compare(x.Name, name_a, StringComparison.OrdinalIgnoreCase) == 0)
+                .Should().BeTrue();
+        }
     }
 }

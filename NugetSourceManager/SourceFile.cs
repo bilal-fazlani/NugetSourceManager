@@ -42,6 +42,9 @@ namespace NugetSourceManager
             {
                 if (existingPackageSources.Count == 1)
                 {
+                    //first update the disable section for name
+                    UpdateDisabledSectionForName(existingPackageSources[0].Name, name);
+
                     existingPackageSources[0].Name = name;
                     existingPackageSources[0].SourcePath = sourcePath;
                     existingPackageSources[0].ProtocolVersion = protocalVersion;
@@ -50,6 +53,7 @@ namespace NugetSourceManager
                 {
                     foreach (var source in existingPackageSources)
                     {
+                        UpdateDisabledSectionForName(source.Name, name);
                         XmlData.PackageSources.Entries.Remove(source);
                     }
 
@@ -95,8 +99,20 @@ namespace NugetSourceManager
 
         public void RemovePackageSource(string packageSourceNameOrPath)
         {
+            string sourceIdentifier = packageSourceNameOrPath;
+
+            try
+            {
+                sourceIdentifier = GetName(packageSourceNameOrPath);
+            }
+            catch (InvalidOperationException)
+            {
+            }
+
             XmlData.PackageSources.Entries
-                .RemoveAll(x => x.Equals(packageSourceNameOrPath));
+                    .RemoveAll(x => x.Equals(sourceIdentifier));
+
+            XmlData.DisabledPackageSources.Remove(sourceIdentifier);
 
             Save();
         }
@@ -121,6 +137,14 @@ namespace NugetSourceManager
                 XmlData.DisabledPackageSources.Add(name);
 
             Save();
+        }
+
+        private void UpdateDisabledSectionForName(string oldName, string newName)
+        {
+            var matchingEntry = XmlData.DisabledPackageSources.Entries.SingleOrDefault(x =>
+                string.Compare(x.Name, oldName, StringComparison.OrdinalIgnoreCase) == 0);
+
+            if (matchingEntry != null) matchingEntry.Name = newName;
         }
 
         private string GetName(string packageSourceNameOrPath)

@@ -41,9 +41,30 @@ namespace NugetSourceManager.Tests
         }
 
         [Fact]
-        public void RemoveSource_ShouldNorBreak_When_SourceDoesntExist()
+        public void RemoveSource_ShouldNotBreak_When_SourceDoesntExist()
         {
             _defaultSourceFile.RemovePackageSource(Guid.NewGuid().ToString());
+        }
+
+        [Fact]
+        public void Removal_of_source_removes_entries_from_all_sections()
+        {
+            PackageSource packageSource = AddRandomSourceToDefault();
+
+            //disable it 
+            _defaultSourceFile.DisablePackageSource(packageSource.SourcePath);
+
+            //now remove the source
+            _defaultSourceFile.RemovePackageSource(packageSource.SourcePath);
+
+            //now make sure it doesnt exist
+            _defaultSourceFile.GetPackageSource(packageSource.Name)
+                .Should().BeNull("package should be removed but still exists");
+
+            //now make sure it doesn't exist in disabled entries
+            _defaultSourceFile.XmlData.DisabledPackageSources
+                .Contains(packageSource.Name)
+                .Should().BeFalse("entry should have been removed from disabled section");
         }
     }
 }
