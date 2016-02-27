@@ -10,7 +10,7 @@ namespace NugetSourceManager.Serialization.Sections
     public class DisabledPackageSources
     {
         [XmlElement(ElementName = "add")]
-        public List<DisabledSourceEntry> Entries { get; set; }
+        public List<DisabledSourceEntry> Entries { get; set; } = new List<DisabledSourceEntry>();
 
         public bool Contains(string name)
         {

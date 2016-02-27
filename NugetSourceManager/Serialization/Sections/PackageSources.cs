@@ -8,6 +8,6 @@ namespace NugetSourceManager.Serialization.Sections
     public class PackageSources
     {
         [XmlElement(ElementName = "add")]
-        public List<PackageSourceEntry> Entries { get; set; }
+        public List<PackageSourceEntry> Entries { get; set; } = new List<PackageSourceEntry>();
     }
 }

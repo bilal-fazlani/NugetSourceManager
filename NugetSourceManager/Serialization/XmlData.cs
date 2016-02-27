@@ -9,11 +9,10 @@ namespace NugetSourceManager.Serialization
         [XmlElement(ElementName = "config")]
         public Config Config { get; set; }
 
-
         [XmlElement(ElementName = "packageSources")]
-        public PackageSources PackageSources { get; set; }
+        public PackageSources PackageSources { get; set; } = new PackageSources();
         [XmlElement(ElementName = "disabledPackageSources")]
-        public DisabledPackageSources DisabledPackageSources { get; set; }
+        public DisabledPackageSources DisabledPackageSources { get; set; } = new DisabledPackageSources();
         [XmlElement(ElementName = "packageRestore")]
         public PackageRestore PackageRestore { get; set; }
         [XmlElement(ElementName = "bindingRedirects")]
