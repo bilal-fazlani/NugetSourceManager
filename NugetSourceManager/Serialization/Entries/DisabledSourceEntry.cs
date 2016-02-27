@@ -1,6 +1,6 @@
 using System.Xml.Serialization;
 
-namespace NugetSourceManager.Serialization
+namespace NugetSourceManager.Serialization.Entries
 {
     [XmlRoot(ElementName = "add")]
     public class DisabledSourceEntry

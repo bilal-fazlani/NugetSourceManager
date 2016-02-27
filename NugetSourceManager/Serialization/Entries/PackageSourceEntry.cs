@@ -1,17 +1,17 @@
 using System;
 using System.Xml.Serialization;
 
-namespace NugetSourceManager.Serialization
+namespace NugetSourceManager.Serialization.Entries
 {
     [XmlRoot(ElementName = "add")]
-    public class PackageSource
+    public class PackageSourceEntry
     {
-        public PackageSource()
+        public PackageSourceEntry()
         {
-            
+
         }
 
-        public PackageSource(string name, string sourcePath, string protocolVersion = null)
+        public PackageSourceEntry(string name, string sourcePath, string protocolVersion = null)
         {
             Name = name;
             SourcePath = sourcePath;
@@ -20,6 +20,7 @@ namespace NugetSourceManager.Serialization
 
         [XmlAttribute(AttributeName = "key")]
         public string Name { get; set; }
+
         [XmlAttribute(AttributeName = "value")]
         public string SourcePath { get; set; }
 
@@ -28,9 +29,9 @@ namespace NugetSourceManager.Serialization
 
         public override bool Equals(object obj)
         {
-            if ((obj as PackageSource) != null)
+            if ((obj as PackageSourceEntry) != null)
             {
-                PackageSource otherSource = (PackageSource)obj;
+                PackageSourceEntry otherSource = (PackageSourceEntry)obj;
 
                 bool nameEquals = string.Compare(otherSource.Name, Name, StringComparison.OrdinalIgnoreCase) == 0;
 
@@ -42,7 +43,7 @@ namespace NugetSourceManager.Serialization
 
             if ((obj as string) != null)
             {
-                string nameOrSource = (string) obj;
+                string nameOrSource = (string)obj;
                 return string.Compare(Name, nameOrSource, StringComparison.OrdinalIgnoreCase) == 0 ||
                        string.Compare(SourcePath, nameOrSource, StringComparison.OrdinalIgnoreCase) == 0;
             }

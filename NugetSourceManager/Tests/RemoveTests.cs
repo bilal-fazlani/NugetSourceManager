@@ -1,6 +1,7 @@
 ﻿using System;
 using FluentAssertions;
 using NugetSourceManager.Serialization;
+using NugetSourceManager.Serialization.Entries;
 using Xunit;
 
 namespace NugetSourceManager.Tests
@@ -50,7 +51,7 @@ namespace NugetSourceManager.Tests
         [Fact]
         public void Removal_of_source_removes_entries_from_all_sections()
         {
-            PackageSource packageSource = AddRandomSourceToDefault();
+            PackageSourceEntry packageSource = AddRandomSourceToDefault();
 
             //disable it 
             _defaultSourceFile.DisablePackageSource(packageSource.SourcePath);

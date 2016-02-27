@@ -67,16 +67,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Serialization\Sections\Config.cs" />
+    <Compile Include="Serialization\Entries\StringConfigEntry.cs" />
+    <Compile Include="Serialization\Entries\PackageSourceEntry.cs" />
     <Compile Include="SourceFile\CustomSourceFile.cs" />
     <Compile Include="SourceFile\DefaultSourceFile.cs" />
-    <Compile Include="Serialization\ActivePackageSource.cs" />
-    <Compile Include="Serialization\Apikeys.cs" />
-    <Compile Include="Serialization\BindingRedirects.cs" />
-    <Compile Include="Serialization\DisabledPackageSources.cs" />
-    <Compile Include="Serialization\DisabledSourceEntry.cs" />
-    <Compile Include="Serialization\PackageRestore.cs" />
-    <Compile Include="Serialization\PackageSource.cs" />
-    <Compile Include="Serialization\PackageSources.cs" />
+    <Compile Include="Serialization\Sections\ActivePackageSource.cs" />
+    <Compile Include="Serialization\Sections\Apikeys.cs" />
+    <Compile Include="Serialization\Sections\BindingRedirects.cs" />
+    <Compile Include="Serialization\Sections\DisabledPackageSources.cs" />
+    <Compile Include="Serialization\Entries\DisabledSourceEntry.cs" />
+    <Compile Include="Serialization\Sections\PackageRestore.cs" />
+    <Compile Include="Serialization\Sections\PackageSources.cs" />
     <Compile Include="SourceFile\SourceFileBase.cs" />
     <Compile Include="Serialization\XmlData.cs" />
     <Compile Include="Program.cs" />

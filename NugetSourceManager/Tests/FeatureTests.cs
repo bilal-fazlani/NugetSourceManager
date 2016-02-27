@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using FluentAssertions;
 using NugetSourceManager.Serialization;
+using NugetSourceManager.Serialization.Entries;
 using NugetSourceManager.SourceFile;
 using Xunit;
 
@@ -12,7 +13,7 @@ namespace NugetSourceManager.Tests
     {
         protected readonly SourceFileBase _defaultSourceFile = DefaultSourceFile.GetInstace();
 
-        protected PackageSource AddRandomSourceToDefault(
+        protected PackageSourceEntry AddRandomSourceToDefault(
             string name = null, string source = null)
         {
             string sourceName = name ?? Guid.NewGuid().ToString();
@@ -20,7 +21,7 @@ namespace NugetSourceManager.Tests
 
             _defaultSourceFile.AddOrUpdateSource(sourceName, sourcePath);
 
-            return new PackageSource(sourceName, sourcePath);
+            return new PackageSourceEntry(sourceName, sourcePath);
         }
     }
 }

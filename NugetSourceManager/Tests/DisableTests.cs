@@ -1,6 +1,7 @@
 ﻿using System;
 using FluentAssertions;
 using NugetSourceManager.Serialization;
+using NugetSourceManager.Serialization.Entries;
 using Xunit;
 
 namespace NugetSourceManager.Tests
@@ -10,7 +11,7 @@ namespace NugetSourceManager.Tests
         [Fact]
         public void Can_DisablePackageSource_WhenNameExists_And_NotAlreadyDisabled()
         {
-            PackageSource source = AddRandomSourceToDefault();
+            PackageSourceEntry source = AddRandomSourceToDefault();
 
             _defaultSourceFile.DisablePackageSource(source.Name);
 
@@ -22,7 +23,7 @@ namespace NugetSourceManager.Tests
         [Fact]
         public void Can_DisablePackageSource_WhenNameExists_And_AlreadyDisabled()
         {
-            PackageSource source = AddRandomSourceToDefault();
+            PackageSourceEntry source = AddRandomSourceToDefault();
 
             _defaultSourceFile.DisablePackageSource(source.Name);
 
@@ -41,7 +42,7 @@ namespace NugetSourceManager.Tests
         [Fact]
         public void Can_DisablePackageSource_WhenPathExists_And_NotAlreadyDisabled()
         {
-            PackageSource source = AddRandomSourceToDefault();
+            PackageSourceEntry source = AddRandomSourceToDefault();
 
             _defaultSourceFile.DisablePackageSource(source.SourcePath);
 

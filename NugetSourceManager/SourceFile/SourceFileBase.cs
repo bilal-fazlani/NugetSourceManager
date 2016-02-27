@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 using NugetSourceManager.Serialization;
+using NugetSourceManager.Serialization.Entries;
 
 namespace NugetSourceManager.SourceFile
 {
@@ -27,14 +28,14 @@ namespace NugetSourceManager.SourceFile
 
         public void AddOrUpdateSource(string name, string sourcePath, string protocalVersion = null)
         {
-            PackageSource newPackageSource = new PackageSource
+            PackageSourceEntry newPackageSource = new PackageSourceEntry
             {
                 Name = name,
                 SourcePath = sourcePath,
                 ProtocolVersion = protocalVersion
             };
 
-            List<PackageSource> existingPackageSources = XmlData.PackageSources.Entries
+            List<PackageSourceEntry> existingPackageSources = XmlData.PackageSources.Entries
                 .Where(x => x.Equals(newPackageSource))
                 .ToList();
 
@@ -117,7 +118,7 @@ namespace NugetSourceManager.SourceFile
             Save();
         }
 
-        public PackageSource GetPackageSource(string packageSourceNameOrPath)
+        public PackageSourceEntry GetPackageSource(string packageSourceNameOrPath)
         {
             return XmlData.PackageSources.Entries.SingleOrDefault(
                     x => x.Equals(packageSourceNameOrPath)
@@ -149,7 +150,7 @@ namespace NugetSourceManager.SourceFile
 
         private string GetName(string packageSourceNameOrPath)
         {
-            PackageSource packageSource = GetPackageSource(packageSourceNameOrPath);
+            PackageSourceEntry packageSource = GetPackageSource(packageSourceNameOrPath);
 
             if (packageSource != null)
             {

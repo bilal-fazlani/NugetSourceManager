@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using NugetSourceManager.Serialization.Entries;
 
-namespace NugetSourceManager.Serialization
+namespace NugetSourceManager.Serialization.Sections
 {
     [XmlRoot(ElementName = "packageSources")]
     public class PackageSources
     {
         [XmlElement(ElementName = "add")]
-        public List<PackageSource> Entries { get; set; }
+        public List<PackageSourceEntry> Entries { get; set; }
     }
 }

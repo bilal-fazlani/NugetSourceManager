@@ -1,10 +1,15 @@
 ﻿using System.Xml.Serialization;
+using NugetSourceManager.Serialization.Sections;
 
 namespace NugetSourceManager.Serialization
 {
     [XmlRoot(ElementName = "configuration")]
     public class XmlData
     {
+        [XmlElement(ElementName = "config")]
+        public Config Config { get; set; }
+
+
         [XmlElement(ElementName = "packageSources")]
         public PackageSources PackageSources { get; set; }
         [XmlElement(ElementName = "disabledPackageSources")]

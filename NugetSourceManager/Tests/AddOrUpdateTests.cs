@@ -2,6 +2,7 @@
 using System.Linq;
 using FluentAssertions;
 using NugetSourceManager.Serialization;
+using NugetSourceManager.Serialization.Entries;
 using Xunit;
 
 namespace NugetSourceManager.Tests
@@ -16,7 +17,7 @@ namespace NugetSourceManager.Tests
 
             _defaultSourceFile.AddOrUpdateSource(newSourceName, newSourceValue);
 
-            PackageSource expectedRecord = _defaultSourceFile.XmlData.PackageSources.Entries.SingleOrDefault(
+            PackageSourceEntry expectedRecord = _defaultSourceFile.XmlData.PackageSources.Entries.SingleOrDefault(
                 x => x.Name == newSourceName && x.SourcePath == newSourceValue && x.ProtocolVersion == null);
 
             expectedRecord.Should().NotBeNull("did not find added nuget source");
@@ -34,7 +35,7 @@ namespace NugetSourceManager.Tests
             AddRandomSourceToDefault(packageName, newPackageSource);
 
             //assert
-            PackageSource expectedRecord = _defaultSourceFile.XmlData.PackageSources
+            PackageSourceEntry expectedRecord = _defaultSourceFile.XmlData.PackageSources
                 .Entries.SingleOrDefault(
                 x => x.Name == packageName &&
                 x.SourcePath == newPackageSource &&
@@ -42,7 +43,7 @@ namespace NugetSourceManager.Tests
 
             expectedRecord.Should().NotBeNull("did not find added nuget source");
 
-            PackageSource unExpectedRecord = _defaultSourceFile.XmlData.PackageSources
+            PackageSourceEntry unExpectedRecord = _defaultSourceFile.XmlData.PackageSources
                 .Entries.SingleOrDefault(
                 x => x.Name == packageName &&
                 x.SourcePath == oldPackageSource &&
@@ -63,7 +64,7 @@ namespace NugetSourceManager.Tests
             AddRandomSourceToDefault(newPackagename, packageSource);
 
             //assert
-            PackageSource expectedRecord = _defaultSourceFile.XmlData.PackageSources
+            PackageSourceEntry expectedRecord = _defaultSourceFile.XmlData.PackageSources
                 .Entries.SingleOrDefault(
                 x => x.Name == newPackagename &&
                 x.SourcePath == packageSource &&
@@ -71,7 +72,7 @@ namespace NugetSourceManager.Tests
 
             expectedRecord.Should().NotBeNull("did not find added nuget source");
 
-            PackageSource unExpectedRecord = _defaultSourceFile.XmlData.PackageSources
+            PackageSourceEntry unExpectedRecord = _defaultSourceFile.XmlData.PackageSources
                 .Entries.SingleOrDefault(
                 x => x.Name == oldPackageName &&
                 x.SourcePath == packageSource &&

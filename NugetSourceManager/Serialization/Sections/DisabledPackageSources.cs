@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
+using NugetSourceManager.Serialization.Entries;
 
-namespace NugetSourceManager.Serialization
+namespace NugetSourceManager.Serialization.Sections
 {
     [XmlRoot(ElementName = "disabledPackageSources")]
     public class DisabledPackageSources

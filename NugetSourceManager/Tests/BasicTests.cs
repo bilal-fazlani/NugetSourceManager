@@ -2,6 +2,7 @@
 using System.IO;
 using FluentAssertions;
 using NugetSourceManager.Serialization;
+using NugetSourceManager.Serialization.Entries;
 using NugetSourceManager.SourceFile;
 using Xunit;
 
@@ -10,17 +11,6 @@ namespace NugetSourceManager.Tests
     public class BasicTests
     {
         private readonly SourceFileBase _defaultSourceFile = DefaultSourceFile.GetInstace();
-
-        private PackageSource AddRandomSourceToDefault(
-            string name = null, string source = null)
-        {
-            string sourceName = name ?? Guid.NewGuid().ToString();
-            string sourcePath = source ?? $"http://{Guid.NewGuid()}/org/nugets";
-
-            _defaultSourceFile.AddOrUpdateSource(sourceName, sourcePath);
-
-            return new PackageSource(sourceName, sourcePath);
-        }
 
         [Fact]
         public void CanFindDefaultSourceFile()
