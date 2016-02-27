@@ -65,3 +65,11 @@ Or
 ```
 NugetSourceManager disable "InternalNugetRepo"
 ```
+
+## How to see list to of nuget sources ?
+
+```
+NugetSourceManager list
+```
+
+
