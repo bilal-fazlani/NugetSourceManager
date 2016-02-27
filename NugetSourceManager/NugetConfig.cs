@@ -90,6 +90,17 @@ namespace NugetSourceManager
                     .Disabled = true;
             }
         }
+
+        public void Remove(string name)
+        {
+            if (Contains(name))
+            {
+                var entry = Entries
+                    .Single(x =>
+                        string.Compare(name, x.Name, StringComparison.OrdinalIgnoreCase) == 0);
+                Entries.Remove(entry);
+            }
+        }
     }
 
     [XmlRoot(ElementName = "add")]

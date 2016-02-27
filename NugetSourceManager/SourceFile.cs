@@ -19,7 +19,7 @@ namespace NugetSourceManager
             ns.Add("", "");
 
             XmlSerializer serializer = new XmlSerializer(typeof(XmlData));
-            using (var filestream = new FileStream(Path, FileMode.OpenOrCreate))
+            using (var filestream = new FileStream(Path, FileMode.Create))
             {
                 serializer.Serialize(filestream, XmlData, ns);
             }
@@ -106,8 +106,7 @@ namespace NugetSourceManager
 
         private string GetName(string packageSourceNameOrPath)
         {
-            PackageSource packageSource = XmlData.PackageSources.Entries
-                .SingleOrDefault(x => x.Equals(packageSourceNameOrPath));
+            PackageSource packageSource = GetPackageSource(packageSourceNameOrPath);
 
             if (packageSource != null)
             {
@@ -122,6 +121,15 @@ does not exist");
         {
             var name = GetName(packageSourceNameOrPath);
             return XmlData.DisabledPackageSources.Contains(name);
+        }
+
+        public void EnablePackageSource(string packageSourceNameOrPath)
+        {
+            string name = GetName(packageSourceNameOrPath);
+
+            XmlData.DisabledPackageSources.Remove(name);
+
+            Save();
         }
     }
 
