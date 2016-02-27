@@ -16,7 +16,7 @@ namespace NugetSourceManager.Tests
         public void CanFindDefaultSourceFile()
         {
             string actualPath = _defaultSourceFile.Path;
-            string expectedPath = @"C:\Users\bfazlani\AppData\Roaming\NuGet\NuGet.Config";
+            string expectedPath = $@"C:\Users\{Environment.UserName}\AppData\Roaming\NuGet\NuGet.Config";
             string.Compare(actualPath, expectedPath, StringComparison.OrdinalIgnoreCase)
                 .ShouldBeEquivalentTo(0);
         }
