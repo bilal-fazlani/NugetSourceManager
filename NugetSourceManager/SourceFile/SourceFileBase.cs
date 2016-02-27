@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
+using NugetSourceManager.Models;
 using NugetSourceManager.Serialization;
 using NugetSourceManager.Serialization.Entries;
 
@@ -174,6 +175,20 @@ does not exist");
             XmlData.DisabledPackageSources.Remove(name);
 
             Save();
+        }
+
+        public List<PackageSourceModel> List()
+        {
+            return XmlData.PackageSources
+                .Entries
+                .Select(x => new PackageSourceModel
+                {
+                    Name = x.Name,
+                    SourcePath = x.SourcePath,
+                    IsActive = !IsSourceDisabled(x.Name)
+                })
+                .OrderByDescending(x=>x.IsActive)
+                .ToList();
         }
     }
 }

@@ -67,6 +67,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\PackageSource.cs" />
     <Compile Include="Serialization\Sections\Config.cs" />
     <Compile Include="Serialization\Entries\StringConfigEntry.cs" />
     <Compile Include="Serialization\Entries\PackageSourceEntry.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="Tests\BasicTests.cs" />
     <Compile Include="Tests\DisableTests.cs" />
     <Compile Include="Tests\EnableTests.cs" />
+    <Compile Include="Tests\ListTests.cs" />
     <Compile Include="Tests\LoadXmlTests.cs" />
     <Compile Include="Tests\RemoveTests.cs" />
     <Compile Include="Tests\FeatureTests.cs" />
