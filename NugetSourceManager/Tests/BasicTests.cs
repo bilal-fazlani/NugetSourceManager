@@ -1,13 +1,15 @@
 ﻿using System;
 using System.IO;
 using FluentAssertions;
+using NugetSourceManager.Serialization;
+using NugetSourceManager.SourceFile;
 using Xunit;
 
 namespace NugetSourceManager.Tests
 {
     public class BasicTests
     {
-        private readonly SourceFile _defaultSourceFile = DefaultSourceFile.GetInstace();
+        private readonly SourceFileBase _defaultSourceFile = DefaultSourceFile.GetInstace();
 
         private PackageSource AddRandomSourceToDefault(
             string name = null, string source = null)

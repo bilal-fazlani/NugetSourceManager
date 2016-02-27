@@ -1,5 +1,6 @@
 ﻿using System;
 using FluentAssertions;
+using NugetSourceManager.Serialization;
 using Xunit;
 
 namespace NugetSourceManager.Tests

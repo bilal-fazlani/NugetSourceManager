@@ -2,13 +2,15 @@
 using System.IO;
 using System.Linq;
 using FluentAssertions;
+using NugetSourceManager.Serialization;
+using NugetSourceManager.SourceFile;
 using Xunit;
 
 namespace NugetSourceManager.Tests
 {
     public class FeatureTests
     {
-        protected readonly SourceFile _defaultSourceFile = DefaultSourceFile.GetInstace();
+        protected readonly SourceFileBase _defaultSourceFile = DefaultSourceFile.GetInstace();
 
         protected PackageSource AddRandomSourceToDefault(
             string name = null, string source = null)

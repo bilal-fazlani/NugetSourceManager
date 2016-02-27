@@ -67,8 +67,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SourceFile.cs" />
-    <Compile Include="NugetConfig.cs" />
+    <Compile Include="SourceFile\CustomSourceFile.cs" />
+    <Compile Include="SourceFile\DefaultSourceFile.cs" />
+    <Compile Include="Serialization\ActivePackageSource.cs" />
+    <Compile Include="Serialization\Apikeys.cs" />
+    <Compile Include="Serialization\BindingRedirects.cs" />
+    <Compile Include="Serialization\DisabledPackageSources.cs" />
+    <Compile Include="Serialization\DisabledSourceEntry.cs" />
+    <Compile Include="Serialization\PackageRestore.cs" />
+    <Compile Include="Serialization\PackageSource.cs" />
+    <Compile Include="Serialization\PackageSources.cs" />
+    <Compile Include="SourceFile\SourceFileBase.cs" />
+    <Compile Include="Serialization\XmlData.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\AddOrUpdateTests.cs" />
@@ -86,6 +96,7 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

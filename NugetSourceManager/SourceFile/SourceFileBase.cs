@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
-using FluentAssertions.Common;
+using NugetSourceManager.Serialization;
 
-namespace NugetSourceManager
+namespace NugetSourceManager.SourceFile
 {
-    public abstract class SourceFile
+    public abstract class SourceFileBase
     {
         public string Path { get; protected set; }
 
@@ -173,58 +173,6 @@ does not exist");
             XmlData.DisabledPackageSources.Remove(name);
 
             Save();
-        }
-    }
-
-    public class DefaultSourceFile : SourceFile
-    {
-        private static readonly DefaultSourceFile Instance = new DefaultSourceFile();
-
-        public static DefaultSourceFile GetInstace()
-        {
-            return Instance;
-        }
-
-        private DefaultSourceFile()
-        {
-            SetDefaultPath();
-            LoadXml();
-        }
-
-        private void SetDefaultPath()
-        {
-            string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            string nugetPath = System.IO.Path.Combine(appData, "Nuget", "Nuget.Config");
-            this.Path = nugetPath;
-        }
-    }
-
-    public class CustomSourceFile : SourceFile
-    {
-        private static readonly Dictionary<string, CustomSourceFile> Instances = new Dictionary<string, CustomSourceFile>();
-
-        public static CustomSourceFile GetInstace(string path)
-        {
-            return Instances.ContainsKey(path) ? Instances[path] : AddCustomSourceFileInstance(path);
-        }
-
-        private static CustomSourceFile AddCustomSourceFileInstance(string path)
-        {
-            var instance = new CustomSourceFile(path);
-            Instances.Add(path, instance);
-            return instance;
-        }
-
-        private CustomSourceFile(string path)
-        {
-            SetCustomPath(path);
-            LoadXml();
-        }
-
-        private void SetCustomPath(string path)
-        {
-            if (File.Exists(path)) this.Path = path;
-            else throw new FileNotFoundException("Nuget.Config file not found", path);
         }
     }
 }

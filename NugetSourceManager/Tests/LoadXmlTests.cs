@@ -1,11 +1,11 @@
 using System;
 using FluentAssertions;
-using FluentAssertions.Common;
+using NugetSourceManager.SourceFile;
 using Xunit;
 
 namespace NugetSourceManager.Tests
 {
-    public class LoadXmlTests : SourceFile
+    public class LoadXmlTests : SourceFileBase
     {
         public LoadXmlTests()
         {
