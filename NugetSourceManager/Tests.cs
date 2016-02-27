@@ -32,7 +32,7 @@ namespace NugetSourceManager
 
             _defaultSourceFile.AddOrUpdateSource(newSourceName, newSourceValue);
 
-            PackageSource expectedRecord = _defaultSourceFile.XmlData.PackageSources.Sources.SingleOrDefault(
+            PackageSource expectedRecord = _defaultSourceFile.XmlData.PackageSources.Entries.SingleOrDefault(
                 x => x.Name == newSourceName && x.SourcePath == newSourceValue && x.ProtocolVersion == null);
 
             expectedRecord.Should().NotBeNull("did not find added nuget source");
@@ -41,15 +41,12 @@ namespace NugetSourceManager
         private PackageSource AddRandomSourceToDefault(
             string name = null, string source = null)
         {
-            PackageSource packageSource = new PackageSource
-            {
-                Name = name ?? Guid.NewGuid().ToString(),
-                SourcePath = source ?? $"http://{Guid.NewGuid()}/org/nugets"
-            };
+            string sourceName = name ?? Guid.NewGuid().ToString();
+            string sourcePath = source ?? $"http://{Guid.NewGuid()}/org/nugets";
 
-            _defaultSourceFile.AddOrUpdateSource(packageSource);
+            _defaultSourceFile.AddOrUpdateSource(sourceName, sourcePath);
 
-            return packageSource;
+            return new PackageSource(sourceName, sourcePath);
         }
 
         [Fact]
@@ -65,7 +62,7 @@ namespace NugetSourceManager
 
             //assert
             PackageSource expectedRecord = _defaultSourceFile.XmlData.PackageSources
-                .Sources.SingleOrDefault(
+                .Entries.SingleOrDefault(
                 x => x.Name == packageName && 
                 x.SourcePath == newPackageSource && 
                 x.ProtocolVersion == null);
@@ -73,7 +70,7 @@ namespace NugetSourceManager
             expectedRecord.Should().NotBeNull("did not find added nuget source");
 
             PackageSource unExpectedRecord = _defaultSourceFile.XmlData.PackageSources
-                .Sources.SingleOrDefault(
+                .Entries.SingleOrDefault(
                 x => x.Name == packageName &&
                 x.SourcePath == oldPackageSource &&
                 x.ProtocolVersion == null);
@@ -94,7 +91,7 @@ namespace NugetSourceManager
 
             //assert
             PackageSource expectedRecord = _defaultSourceFile.XmlData.PackageSources
-                .Sources.SingleOrDefault(
+                .Entries.SingleOrDefault(
                 x => x.Name == newPackagename &&
                 x.SourcePath == packageSource &&
                 x.ProtocolVersion == null);
@@ -102,7 +99,7 @@ namespace NugetSourceManager
             expectedRecord.Should().NotBeNull("did not find added nuget source");
 
             PackageSource unExpectedRecord = _defaultSourceFile.XmlData.PackageSources
-                .Sources.SingleOrDefault(
+                .Entries.SingleOrDefault(
                 x => x.Name == oldPackageName &&
                 x.SourcePath == packageSource &&
                 x.ProtocolVersion == null);
@@ -127,17 +124,17 @@ namespace NugetSourceManager
 
             //assert
             _defaultSourceFile.XmlData.PackageSources
-                .Sources
+                .Entries
                 .SingleOrDefault(x => x.Name == oldPackageName && x.SourcePath == oldPackageSource)
                 .Should().BeNull("this package should not exist");
 
             _defaultSourceFile.XmlData.PackageSources
-                .Sources
+                .Entries
                 .SingleOrDefault(x => x.Name == newPackageSource && x.SourcePath == newPackageSource)
                 .Should().BeNull("this package should not exist");
 
             _defaultSourceFile.XmlData.PackageSources
-                .Sources
+                .Entries
                 .SingleOrDefault(x => x.Name == oldPackageName && x.SourcePath == newPackageSource)
                 .Should().NotBeNull("this package should exist!");
         }
@@ -180,6 +177,61 @@ namespace NugetSourceManager
         public void RemoveSource_ShouldNorBreak_When_SourceDoesntExist()
         {
             _defaultSourceFile.RemovePackageSource(Guid.NewGuid().ToString());
+        }
+
+        [Fact]
+        public void Can_DisablePackageSource_WhenNameExists_And_NotAlreadyDisabled()
+        {
+            PackageSource source = AddRandomSourceToDefault();
+
+            _defaultSourceFile.DisablePackageSource(source.Name);
+
+            //assert
+            _defaultSourceFile.IsSourceDisabled(source.Name)
+                .Should().BeTrue("source should not be enabled");
+        }
+
+        [Fact]
+        public void Can_DisablePackageSource_WhenNameExists_And_AlreadyDisabled()
+        {
+            PackageSource source = AddRandomSourceToDefault();
+
+            _defaultSourceFile.DisablePackageSource(source.Name);
+
+            _defaultSourceFile.IsSourceDisabled(source.Name)
+                .Should().BeTrue("source should not be enabled");
+
+            //now there is a source that is already disabled
+            //lets disable again
+            _defaultSourceFile.DisablePackageSource(source.Name);
+
+            //assert
+            _defaultSourceFile.IsSourceDisabled(source.Name)
+                .Should().BeTrue("source should not be enabled");
+        }
+
+        [Fact]
+        public void Can_DisablePackageSource_WhenPathExists_And_NotAlreadyDisabled()
+        {
+            PackageSource source = AddRandomSourceToDefault();
+
+            _defaultSourceFile.DisablePackageSource(source.SourcePath);
+
+            //assert
+            _defaultSourceFile.IsSourceDisabled(source.SourcePath)
+                .Should().BeTrue("source should not be enabled");
+        }
+
+        [Fact]
+        public void Can_DisableSource_WhenSourceDoesntExist()
+        {
+            string randomName = Guid.NewGuid().ToString();
+
+            //assert
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                _defaultSourceFile.DisablePackageSource(randomName);
+            });
         }
     }
 }

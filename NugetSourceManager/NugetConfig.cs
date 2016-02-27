@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Policy;
 using System.Xml.Serialization;
 
@@ -8,6 +9,18 @@ namespace NugetSourceManager
     [XmlRoot(ElementName = "add")]
     public class PackageSource
     {
+        public PackageSource()
+        {
+            
+        }
+
+        public PackageSource(string name, string sourcePath, string protocolVersion = null)
+        {
+            Name = name;
+            SourcePath = sourcePath;
+            ProtocolVersion = protocolVersion;
+        }
+
         [XmlAttribute(AttributeName = "key")]
         public string Name { get; set; }
         [XmlAttribute(AttributeName = "value")]
@@ -45,14 +58,48 @@ namespace NugetSourceManager
     public class PackageSources
     {
         [XmlElement(ElementName = "add")]
-        public List<PackageSource> Sources { get; set; }
+        public List<PackageSource> Entries { get; set; }
     }
 
     [XmlRoot(ElementName = "disabledPackageSources")]
     public class DisabledPackageSources
     {
         [XmlElement(ElementName = "add")]
-        public PackageSource PackageSource { get; set; }
+        public List<DisabledSourceEntry> Entries { get; set; }
+
+        public bool Contains(string name)
+        {
+            return Entries.Any(x => 
+                string.Compare(name, x.Name, StringComparison.OrdinalIgnoreCase) == 0);
+        }
+
+        public void Add(string name)
+        {
+            if (!Contains(name))
+            {
+                Entries.Add(new DisabledSourceEntry
+                {
+                    Name = name
+                });
+            }
+            else
+            {
+                Entries
+                    .Single(x =>
+                        string.Compare(name, x.Name, StringComparison.OrdinalIgnoreCase) == 0)
+                    .Disabled = true;
+            }
+        }
+    }
+
+    [XmlRoot(ElementName = "add")]
+    public class DisabledSourceEntry
+    {
+        [XmlAttribute(AttributeName = "key")]
+        public string Name { get; set; }
+
+        [XmlAttribute(AttributeName = "value")]
+        public bool Disabled { get; set; } = true;
     }
 
     [XmlRoot(ElementName = "packageRestore")]

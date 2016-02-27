@@ -25,11 +25,6 @@ namespace NugetSourceManager
             }
         }
 
-        public void AddOrUpdateSource(PackageSource packageSource)
-        {
-            AddOrUpdateSource(packageSource.Name, packageSource.SourcePath, packageSource.ProtocolVersion);
-        }
-
         public void AddOrUpdateSource(string name, string sourcePath, string protocalVersion = null)
         {
             PackageSource newPackageSource = new PackageSource
@@ -39,7 +34,7 @@ namespace NugetSourceManager
                 ProtocolVersion = protocalVersion
             };
 
-            List<PackageSource> existingPackageSources = XmlData.PackageSources.Sources
+            List<PackageSource> existingPackageSources = XmlData.PackageSources.Entries
                 .Where(x => x.Equals(newPackageSource))
                 .ToList();
 
@@ -55,15 +50,15 @@ namespace NugetSourceManager
                 {
                     foreach (var source in existingPackageSources)
                     {
-                        XmlData.PackageSources.Sources.Remove(source);
+                        XmlData.PackageSources.Entries.Remove(source);
                     }
 
-                    XmlData.PackageSources.Sources.Add(newPackageSource);
+                    XmlData.PackageSources.Entries.Add(newPackageSource);
                 }
             }
             else
             {
-                XmlData.PackageSources.Sources.Add(newPackageSource);
+                XmlData.PackageSources.Entries.Add(newPackageSource);
             }
 
             Save();
@@ -79,19 +74,54 @@ namespace NugetSourceManager
             }
         }
 
+        public void RemovePackageSource(string packageSourceNameOrPath)
+        {
+            XmlData.PackageSources.Entries
+                .RemoveAll(x => x.Equals(packageSourceNameOrPath));
+
+            Save();
+        }
+
         public PackageSource GetPackageSource(string packageSourceNameOrPath)
         {
-            return XmlData.PackageSources.Sources.SingleOrDefault(
+            return XmlData.PackageSources.Entries.SingleOrDefault(
                     x => x.Equals(packageSourceNameOrPath)
                 );
         }
 
-        public void RemovePackageSource(string packageSourceNameOrPath)
+        /// <summary>
+        /// Disable an existing package
+        /// </summary>
+        /// <param name="packageSourceNameOrPath"></param>
+        /// <exception cref="InvalidOperationException">When the given package does not exist</exception>
+        public void DisablePackageSource(string packageSourceNameOrPath)
         {
-            XmlData.PackageSources.Sources
-                .RemoveAll(x => x.Equals(packageSourceNameOrPath));
+            string name = GetName(packageSourceNameOrPath);
+
+            if(!string.IsNullOrEmpty(name))
+                XmlData.DisabledPackageSources.Add(name);
 
             Save();
+        }
+
+        private string GetName(string packageSourceNameOrPath)
+        {
+            PackageSource packageSource = XmlData.PackageSources.Entries
+                .SingleOrDefault(x => x.Equals(packageSourceNameOrPath));
+
+            if (packageSource != null)
+            {
+                return packageSource.Name;
+            }
+
+            throw new InvalidOperationException($@"A source with name or source path '{packageSourceNameOrPath}' 
+does not exist");
+        }
+
+        public bool IsSourceDisabled(string packageSourceNameOrPath)
+        {
+            var name = GetName(packageSourceNameOrPath);
+            return XmlData.DisabledPackageSources.Contains(name);
         }
     }
 
