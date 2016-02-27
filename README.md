@@ -51,7 +51,7 @@ Or
 NugetSourceManager remove "MyLocalNugetPackages_Latest"
 ```
 
-## Cool. Can I enable or disable a souce ?
+## Cool. Can I enable or disable a source ?
 Yes. Similar to 'remove` command, it supports name or path.
 
 ```
